@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Planificador de Rutas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+            margin: 20px;
+        }
+        #form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"], button {
+            background-color: #db3434;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover, button:hover {
+            background-color: #b93329;
+        }
+        button {
+            margin-top: 15px;
+        }
+        .resultado {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .resultado h2 {
+            color: #2c3e50;
+        }
+        .resultado p {
+            margin: 5px 0;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>VPS:</h1>
+        <form method="post">
+            <div id="form-container">
+                <div>
+                    Lugar: <input type="text" name="lugar" placeholder=" CDMX">
+                    Latitud: <input type="text" name="latitud" placeholder="19.4326">
+                    Longitud: <input type="text" name="longitud" placeholder="-99.1332">
+                    Pedido: <input type="number" name="pedido" placeholder="10">
+                </div>
+            </div>
+            <button type="button" onclick="agregarCampo()">Agregar otro lugar</button><br><br>
+            <input type="submit" value="Calcular Rutas">
+        </form>
+
+        {% if submitted %}
+            <div class="resultado">
+                <h2>Rutas Generadas:</h2>
+                {% if rutas %}
+                    {% for r in rutas %}
+                        <p><strong>Ruta {{ r.id }}:</strong> {{ r.ruta }} (Carga: {{ r.carga }}, Distancia: {{ r.distancia }} km, Clientes: {{ r.clientes }})</p>
+                    {% endfor %}
+                {% else %}
+                    <p>No se generaron rutas. Intenta con más clientes.</p>
+                {% endif %}
+            </div>
+        {% elif error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function agregarCampo() {
+            const container = document.getElementById("form-container");
+            const div = document.createElement("div");
+            div.innerHTML = `
+                Lugar: <input type="text" name="lugar" placeholder="Ej: GDL">
+                Latitud: <input type="text" name="latitud" placeholder="Ej: 20.6597">
+                Longitud: <input type="text" name="longitud" placeholder="Ej: -103.3496">
+                Pedido: <input type="number" name="pedido" placeholder="Ej: 15">
+            `;
+            container.appendChild(div);
+        }
+    </script>
+</body>
+</html>
